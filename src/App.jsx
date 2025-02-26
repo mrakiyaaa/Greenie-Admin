@@ -1,5 +1,16 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import Challenges from './pages/Challenges';
+
 function App() {
-  return <h1 className="text-3xl font-bold underline text-text">Hello world!</h1>;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/challenges" element={<Challenges />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
