@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "\n🔍 Running pre-commit hook...\n"
+
+# Run lint-staged
+npx lint-staged
+
+# Get staged files
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx)$' || true)
+
+if [ -n "$FILES" ]; then
+    echo "🔬 Running ESLint..."
+    npx eslint $FILES
+    if [ $? -ne 0 ]; then
+        echo "❌ ESLint found issues that need to be fixed\n"
+        exit 1
+    fi
+    echo "✅ ESLint completed successfully\n"
+fi
+
+echo "✨ All checks passed! Proceeding with commit...\n"
