@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/dashboard/Dashboard';
-import Challenges from './pages/dashboard/Challenges';
+import ActiveChallenges from './pages/dashboard/ActiveChallenges';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 
@@ -14,7 +14,7 @@ function App() {
 
         {/* Protected Routes */}
         <Route path="/" element={<Dashboard />} />
-        <Route path="/challenges" element={<Challenges />} />
+        <Route path="/active-challenges" element={<ActiveChallenges />} />
       </Routes>
     </Router>
   );
