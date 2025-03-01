@@ -24,7 +24,7 @@ function Sidebar() {
     <div className="flex">
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-white text-text-gray p-4 border-r-2 border-outline transition-transform duration-300 z-50
+        className={`fixed top-0 left-0 h-full bg-white text-textGray p-4 border-r-2 border-outline transition-transform duration-300 z-50
           ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-60`}
       >
         <img
@@ -47,7 +47,7 @@ function Sidebar() {
               </Link>
             </li>
             <li className="mb-2 flex items-center mt-6">
-              <Link to="/challenges" className="flex items-center space-x-2">
+              <Link to="/active-challenges" className="flex items-center space-x-2">
                 <Swords className="mr-2" size={20} />
                 <span className="text-lg">Challenges</span>
               </Link>
