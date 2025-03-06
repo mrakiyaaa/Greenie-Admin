@@ -3,6 +3,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import ActiveChallenges from './pages/challenges/ActiveChallenges';
 import PendingChallenges from './pages/challenges/PendingChallenges';
 import AddChallenge from './pages/challenges/AddChallenge';
+import ReviewChallenge from './pages/challenges/ReviewChallenge';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/challenges/active-challenges" element={<ActiveChallenges />} />
         <Route path="/challenges/pending-challenges" element={<PendingChallenges />} />
         <Route path="/challenges/add-challenge" element={<AddChallenge />} />
+        <Route path="/challenges/review-challenge" element={<ReviewChallenge />} />
       </Routes>
     </Router>
   );
