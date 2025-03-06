@@ -47,7 +47,7 @@ function Sidebar() {
               </Link>
             </li>
             <li className="mb-2 flex items-center mt-6">
-              <Link to="/active-challenges" className="flex items-center space-x-2">
+              <Link to="/challenges/active-challenges" className="flex items-center space-x-2">
                 <Swords className="mr-2" size={20} />
                 <span className="text-lg">Challenges</span>
               </Link>
