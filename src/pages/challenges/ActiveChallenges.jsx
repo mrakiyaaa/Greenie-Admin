@@ -23,7 +23,7 @@ function ActiveChallenges() {
   }, []);
 
   function handleClick() {
-    navigate('/add-challenge');
+    navigate('/challenges/add-challenge');
   }
 
   // Example challenge cards if no challenges exist
