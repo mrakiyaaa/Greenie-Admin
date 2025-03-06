@@ -72,7 +72,7 @@ function ActiveChallenges() {
               <span
                 className="bg-green-200 text-green-800 px-4 py-1 rounded-full cursor-pointer "
                 onClick={function () {
-                  navigate('/active-challenges');
+                  navigate('/challenges/active-challenges');
                 }}
               >
                 Active (
@@ -86,7 +86,7 @@ function ActiveChallenges() {
               <span
                 className="bg-yellow-200 text-yellow-800 px-4 py-1 rounded-full cursor-pointer"
                 onClick={function () {
-                  navigate('/pending-challenges');
+                  navigate('/challenges/pending-challenges');
                 }}
               >
                 Pending (
