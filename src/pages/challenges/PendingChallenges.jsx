@@ -34,7 +34,8 @@ function PendingChallenges() {
       points: 120,
       description: 'Participate in a beach cleanup and submit photos.',
       status: 'pending',
-      image: 'https://via.placeholder.com/150',
+      image:
+        'https://images.stockcake.com/public/5/3/8/5380c746-d505-424a-9800-c41a762037cb_large/beach-clean-up-efforts-stockcake.jpg',
     },
     {
       id: 5,
@@ -42,7 +43,7 @@ function PendingChallenges() {
       points: 90,
       description: 'Reduce carbon emissions by carpooling for a whole week.',
       status: 'pending',
-      image: 'https://via.placeholder.com/150',
+      image: 'https://talkintrashwithuhn.com/wp-content/uploads/2019/02/carpool-week-2019.png',
     },
     {
       id: 6,
@@ -50,7 +51,8 @@ function PendingChallenges() {
       points: 60,
       description: 'Use reusable bags instead of plastic for grocery shopping.',
       status: 'pending',
-      image: 'https://via.placeholder.com/150',
+      image:
+        'https://www.fosters.com/gcdn/authoring/2009/05/06/NFDD/ghows-FD-fd67ea7e-ee87-422b-b341-0fa9cc784b82-c58ae020.jpeg?width=1200&disable=upscale&format=pjpg&auto=webp',
     },
   ];
 

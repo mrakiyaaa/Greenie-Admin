@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import ActiveCard from '../../components/challenges/ActiveCard';
 import Sidebar from '../../components/layout/Sidebar';
 import Header from '../../components/layout/Header';
@@ -23,7 +23,7 @@ function ActiveChallenges() {
   }, []);
 
   function handleClick() {
-    navigate('/add-challenge');
+    navigate('/challenges/add-challenge');
   }
 
   // Example challenge cards if no challenges exist
@@ -34,7 +34,7 @@ function ActiveChallenges() {
       points: 50,
       description: 'Collect and recycle 5 plastic bottles to earn points.',
       status: 'active',
-      image: 'https://via.placeholder.com/150',
+      image: 'https://ecolife.com/wp-content/uploads/2022/12/Recycling-PP-Plastic-5.png',
     },
     {
       id: 2,
@@ -42,7 +42,7 @@ function ActiveChallenges() {
       points: 100,
       description: 'Plant a tree in your local area and submit proof.',
       status: 'active',
-      image: 'https://via.placeholder.com/150',
+      image: 'https://www.vintagetreecare.com/wp-content/uploads/2018/10/tree_sappling.jpg',
     },
     {
       id: 3,
@@ -50,7 +50,7 @@ function ActiveChallenges() {
       points: 75,
       description: 'Donate leftover food to someone in need.',
       status: 'active',
-      image: 'https://via.placeholder.com/150',
+      image: 'https://www.foodingredientfacts.org/wp-content/uploads/2022/04/Untitled-design-2.png',
     },
   ];
 
@@ -107,10 +107,26 @@ function ActiveChallenges() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
             {challenges.length > 0
               ? challenges.map(function (challenge) {
-                  return <ActiveCard key={challenge.id} challenge={challenge} />;
+                  return (
+                    <Link
+                      key={challenge.id}
+                      to="/challenges/review-challenge"
+                      state={{ challenge }}
+                    >
+                      <ActiveCard challenge={challenge} />
+                    </Link>
+                  );
                 })
               : exampleChallenges.map(function (challenge) {
-                  return <ActiveCard key={challenge.id} challenge={challenge} />;
+                  return (
+                    <Link
+                      key={challenge.id}
+                      to="/challenges/review-challenge"
+                      state={{ challenge }}
+                    >
+                      <ActiveCard challenge={challenge} />
+                    </Link>
+                  );
                 })}
           </div>
         </div>
