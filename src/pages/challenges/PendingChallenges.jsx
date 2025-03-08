@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import PendingCard from '../../components/challenges/PendingCard';
 import Sidebar from '../../components/layout/Sidebar';
 import Header from '../../components/layout/Header';
@@ -23,7 +23,7 @@ function PendingChallenges() {
   }, []);
 
   function handleClick() {
-    navigate('/add-challenge');
+    navigate('/challenges/add-challenge');
   }
 
   // Example challenge cards if no challenges exist
@@ -109,10 +109,18 @@ function PendingChallenges() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
             {challenges.length > 0
               ? challenges.map(function (challenge) {
-                  return <PendingCard key={challenge.id} challenge={challenge} />;
+                  return (
+                    <Link key={challenge.id} to="/proofs/view-proof" state={{ challenge }}>
+                      <PendingCard challenge={challenge} />
+                    </Link>
+                  );
                 })
               : exampleChallenges.map(function (challenge) {
-                  return <PendingCard key={challenge.id} challenge={challenge} />;
+                  return (
+                    <Link key={challenge.id} to="/proofs/view-proof" state={{ challenge }}>
+                      <PendingCard challenge={challenge} />
+                    </Link>
+                  );
                 })}
           </div>
         </div>

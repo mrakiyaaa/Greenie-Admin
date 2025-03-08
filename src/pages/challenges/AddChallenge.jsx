@@ -79,12 +79,12 @@ function AddChallenges() {
         </div>
       )}
 
-      <h2 className="text-2xl font-semibold mb-4 mt-6">Add New Challenge</h2>
+      <h2 className="text-2xl font-semibold mb-4 border-b  pb-3 mt-6">Add New Challenge</h2>
 
       {/* Image Upload */}
-      <div className="mb-4 mt-4">
+      <div className="mb-4 mt-10">
         <label className="block text-gray-700 font-medium mb-1">
-          Challenge Image <span className="text-red-500">*</span>
+          Challenge Image <span className="text-red">*</span>
         </label>
         <div className="border border-gray-300 p-20 rounded-lg flex flex-col items-center cursor-pointer">
           <ImageUp className="text-gray-500 text-3xl mb-2" />
