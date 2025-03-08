@@ -81,10 +81,12 @@ function ReviewChallenges() {
         </div>
       )}
 
-      <h2 className="text-2xl font-semibold text-text-gray mb-4 mt-6">Review Challenge</h2>
+      <h2 className="text-2xl font-semibold text-text-gray border-b pb-3 mb-4 mt-6">
+        Review Challenge
+      </h2>
 
       {/* Image Upload */}
-      <div className="mb-4 mt-4">
+      <div className="mb-4 mt-10">
         <label className="block text-text-gray font-medium mb-1">
           Challenge Image <span className="text-red">*</span>
         </label>
