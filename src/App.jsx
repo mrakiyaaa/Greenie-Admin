@@ -6,6 +6,8 @@ import AddChallenge from './pages/challenges/AddChallenge';
 import ReviewChallenge from './pages/challenges/ReviewChallenge';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import ProductsPage from './pages/shop/ProductsPage';
+import OrdersPage from './pages/shop/OrdersPage';
 
 function App() {
   return (
@@ -23,6 +25,10 @@ function App() {
         <Route path="/challenges/pending-challenges" element={<PendingChallenges />} />
         <Route path="/challenges/add-challenge" element={<AddChallenge />} />
         <Route path="/challenges/review-challenge" element={<ReviewChallenge />} />
+
+        {/* Shop Routes */}
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/orders" element={<OrdersPage />} />
       </Routes>
     </Router>
   );

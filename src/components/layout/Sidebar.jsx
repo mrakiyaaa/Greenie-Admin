@@ -73,11 +73,11 @@ function Sidebar() {
             <li className="mb-2 flex items-center mt-6">
               <Link to="/shop" className="flex items-center space-x-2">
                 <ShoppingCart className="mr-2" size={20} />
-                <span className="text-lg">Shop Management</span>
+                <span className="text-lg">o</span>
               </Link>
             </li>
             <li className="mb-2 flex pl-8 items-center mt-3">
-              <Link to="/product" className="flex items-center space-x-2">
+              <Link to="/products" className="flex items-center space-x-2">
                 <ArrowRight className="mr-2" size={20} />
                 <span className="text-base">Product</span>
               </Link>
