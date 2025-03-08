@@ -12,12 +12,18 @@ import {
   Menu,
   ArrowRight,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isShopOpen, setIsShopOpen] = useState(false);
 
   function toggleSidebar() {
     setIsOpen(!isOpen);
+  }
+
+  function toggleShop() {
+    setIsShopOpen(!isShopOpen);
   }
 
   return (
@@ -70,24 +76,31 @@ function Sidebar() {
                 <span className="text-lg">Badges</span>
               </Link>
             </li>
-            <li className="mb-2 flex items-center mt-6">
-              <Link to="/shop" className="flex items-center space-x-2">
+            <li className="mb-2 flex items-center mt-6 cursor-pointer" onClick={toggleShop}>
+              <div className="flex items-center space-x-2">
                 <ShoppingCart className="mr-2" size={20} />
-                <span className="text-lg">o</span>
-              </Link>
+                <span className="text-lg">Shop Management</span>
+              </div>
             </li>
-            <li className="mb-2 flex pl-8 items-center mt-3">
-              <Link to="/products" className="flex items-center space-x-2">
-                <ArrowRight className="mr-2" size={20} />
-                <span className="text-base">Product</span>
-              </Link>
-            </li>
-            <li className="mb-2 flex pl-8 items-center mt-3">
-              <Link to="/orders" className="flex items-center space-x-2">
-                <ArrowRight className="mr-2" size={20} />
-                <span className="text-base">Orders</span>
-              </Link>
-            </li>
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: isShopOpen ? 'auto' : 0, opacity: isShopOpen ? 1 : 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="overflow-hidden"
+            >
+              <li className="mb-2 flex pl-8 items-center mt-3">
+                <Link to="/products" className="flex items-center space-x-2">
+                  <ArrowRight className="mr-2" size={20} />
+                  <span className="text-base">Product</span>
+                </Link>
+              </li>
+              <li className="mb-2 flex pl-8 items-center mt-3">
+                <Link to="/orders" className="flex items-center space-x-2">
+                  <ArrowRight className="mr-2" size={20} />
+                  <span className="text-base">Orders</span>
+                </Link>
+              </li>
+            </motion.div>
             <li className="mb-2 flex items-center mt-6">
               <Link to="/settings" className="flex items-center space-x-2">
                 <Settings className="mr-2" size={20} />
