@@ -11,6 +11,7 @@ import OrdersPage from './pages/shop/OrdersPage';
 import SettingsPage from './pages/settings/SettingsPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import PublicRoute from './components/auth/PublicRoute';
+import AddProduct from './pages/shop/AddProduct';
 
 function App() {
   return (
@@ -80,6 +81,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ProductsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products/add"
+          element={
+            <ProtectedRoute>
+              <AddProduct />
             </ProtectedRoute>
           }
         />

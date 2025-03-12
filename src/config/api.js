@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
   },
   PRODUCTS: {
     GET_ALL: `${BASE_URL}/products/all`,
+    ADD: `${BASE_URL}/products/add`,
   },
 };
 

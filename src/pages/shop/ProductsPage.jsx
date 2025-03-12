@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/layout/Sidebar';
 import Header from '../../components/layout/Header';
 import ProductTable from '../../components/shop/ProductTable';
@@ -9,6 +10,7 @@ function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -34,7 +36,10 @@ function ProductsPage() {
         <div className="p-4 md:p-8">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl md:text-2xl font-semibold text-textGray">Products</h2>
-            <button className="flex items-center gap-2 bg-primaryGreen text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
+            <button
+              onClick={() => navigate('/products/add')}
+              className="flex items-center gap-2 bg-primaryGreen text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
+            >
               <Plus size={20} />
               Add Product
             </button>
