@@ -12,6 +12,9 @@ export const API_ENDPOINTS = {
     UPDATE: id => `${BASE_URL}/products/update/${id}`,
     DELETE: id => `${BASE_URL}/products/delete/${id}`,
   },
+  ORDERS: {
+    GET_ALL: `${BASE_URL}/order/all`,
+  },
 };
 
 export const apiRequest = async (endpoint, options = {}) => {
