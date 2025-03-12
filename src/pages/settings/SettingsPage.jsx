@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Plus, X, Trash2, Edit } from 'lucide-react';
 import Sidebar from '../../components/layout/Sidebar';
 import Header from '../../components/layout/Header';
+import { API_ENDPOINTS, apiRequest } from '../../config/api';
 
 function SettingsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,30 +28,15 @@ function SettingsPage() {
   };
 
   const registerAdmin = async adminData => {
-    try {
-      const response = await fetch('http://localhost:8080/api/admin/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: adminData.name,
-          email: adminData.email,
-          password: adminData.password,
-          role: 'ADMIN',
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to register admin');
-      }
-
-      return data;
-    } catch (error) {
-      throw new Error(error.message || 'Something went wrong');
-    }
+    return apiRequest(API_ENDPOINTS.ADMIN.REGISTER, {
+      method: 'POST',
+      body: JSON.stringify({
+        name: adminData.name,
+        email: adminData.email,
+        password: adminData.password,
+        role: 'ADMIN',
+      }),
+    });
   };
 
   const handleSubmit = async e => {
