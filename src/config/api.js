@@ -5,6 +5,9 @@ export const API_ENDPOINTS = {
     REGISTER: `${BASE_URL}/admin/register`,
     LOGIN: `${BASE_URL}/admin/login`,
   },
+  PRODUCTS: {
+    GET_ALL: `${BASE_URL}/products/all`,
+  },
 };
 
 export const apiRequest = async (endpoint, options = {}) => {
