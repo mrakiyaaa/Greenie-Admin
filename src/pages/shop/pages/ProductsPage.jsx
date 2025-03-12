@@ -113,23 +113,23 @@ function ProductsPage() {
   };
 
   return (
-    <div className="bg-white min-h-screen flex">
+    <div className="bg-white min-h-screen flex flex-col md:flex-row">
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-1 w-full">
         <Header />
-        <div className="p-4 md:p-8">
-          <div className="flex justify-between items-center mb-6">
+        <div className="p-4 md:p-8 max-w-full overflow-hidden">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <h2 className="text-xl md:text-2xl font-semibold text-textGray">Products</h2>
             <button
               onClick={() => navigate('/products/add')}
-              className="flex items-center gap-2 bg-primaryGreen text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-primaryGreen text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
             >
               <Plus size={20} />
               Add Product
             </button>
           </div>
 
-          <div className="bg-white rounded-lg border border-outlineGray overflow-hidden">
+          <div className="bg-white rounded-lg overflow-hidden">
             <ProductTable
               products={products}
               isLoading={isLoading}
@@ -421,8 +421,6 @@ function ProductsPage() {
           </div>
         </div>
       )}
-
-      {/* ...existing delete modal... */}
     </div>
   );
 }
