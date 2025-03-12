@@ -41,18 +41,29 @@ function AddProduct() {
     setError('');
 
     try {
-      await apiRequest(API_ENDPOINTS.PRODUCTS.ADD, {
+      const response = await apiRequest(API_ENDPOINTS.PRODUCTS.ADD, {
         method: 'POST',
         body: JSON.stringify({
           ...formData,
           price: Number(formData.price),
           numberOfPoints: Number(formData.numberOfPoints),
           quantity: Number(formData.quantity),
+          // Remove productID if it exists to let backend generate it
+          productID: undefined,
         }),
       });
+
+      // Log the response to check if backend is sending the correct ID
+      console.log('New Product Response:', response);
+
+      if (!response.productID) {
+        console.warn('Backend did not return a product ID');
+      }
+
       navigate('/products');
     } catch (err) {
       setError(err.message);
+      console.error('Error adding product:', err);
     } finally {
       setIsLoading(false);
     }
