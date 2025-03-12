@@ -3,6 +3,7 @@ const BASE_URL = 'http://localhost:8080/api';
 export const API_ENDPOINTS = {
   ADMIN: {
     REGISTER: `${BASE_URL}/admin/register`,
+    LOGIN: `${BASE_URL}/admin/login`,
   },
 };
 
