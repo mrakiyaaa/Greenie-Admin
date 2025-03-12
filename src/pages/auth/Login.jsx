@@ -14,7 +14,7 @@ function Login() {
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(''); // Clear error when user types
+    setError('');
   };
 
   const handleSubmit = async e => {
@@ -28,7 +28,7 @@ function Login() {
         body: JSON.stringify(formData),
       });
 
-      // Store auth data in localStorage
+      // auth data in localStorage
       localStorage.setItem(
         'adminAuth',
         JSON.stringify({
@@ -39,7 +39,7 @@ function Login() {
         })
       );
 
-      // Redirect to dashboard
+      // to dashboard
       navigate('/', { replace: true });
     } catch (error) {
       setError(error.message || 'Failed to login. Please check your credentials.');

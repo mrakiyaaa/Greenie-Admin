@@ -9,30 +9,96 @@ import Register from './pages/auth/Register';
 import ProductsPage from './pages/shop/ProductsPage';
 import OrdersPage from './pages/shop/OrdersPage';
 import SettingsPage from './pages/settings/SettingsPage';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import PublicRoute from './components/auth/PublicRoute';
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Auth Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        {/* Public Routes */}
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
 
         {/* Protected Routes */}
-        <Route path="/" element={<Dashboard />} />
-
-        {/* Challenges Routes */}
-        <Route path="/challenges/active-challenges" element={<ActiveChallenges />} />
-        <Route path="/challenges/pending-challenges" element={<PendingChallenges />} />
-        <Route path="/challenges/add-challenge" element={<AddChallenge />} />
-        <Route path="/challenges/review-challenge" element={<ReviewChallenge />} />
-
-        {/* Shop Routes */}
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/orders" element={<OrdersPage />} />
-
-        {/* Settings Route */}
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/challenges/active-challenges"
+          element={
+            <ProtectedRoute>
+              <ActiveChallenges />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/challenges/pending-challenges"
+          element={
+            <ProtectedRoute>
+              <PendingChallenges />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/challenges/add-challenge"
+          element={
+            <ProtectedRoute>
+              <AddChallenge />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/challenges/review-challenge"
+          element={
+            <ProtectedRoute>
+              <ReviewChallenge />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <ProductsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <OrdersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
