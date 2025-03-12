@@ -1,44 +1,67 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 
 function Header() {
-  const [profile, setProfile] = useState(() => {
-    const savedProfile = localStorage.getItem('userProfile');
-    return savedProfile ? JSON.parse(savedProfile) : null;
-  });
-
-  const location = useLocation();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const savedProfile = localStorage.getItem('userProfile');
-
-    if (!savedProfile) {
-      fetch('http://localhost:8080/api/user/profile')
-        .then(response => response.json())
-        .then(data => {
-          setProfile(data);
-          localStorage.setItem('userProfile', JSON.stringify(data));
-        })
-        .catch(error => {
-          console.error('Error fetching profile:', error);
-          const defaultProfile = {
-            name: 'John Doe',
-            imageUrl: 'https://via.placeholder.com/40',
-          };
-          setProfile(defaultProfile);
-          localStorage.setItem('userProfile', JSON.stringify(defaultProfile));
-        });
+    const adminAuth = localStorage.getItem('adminAuth');
+    if (adminAuth) {
+      setProfile(JSON.parse(adminAuth));
     }
-  }, [location.pathname]);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminAuth');
+    navigate('/login');
+  };
+
+  const getInitials = name => {
+    return name ? name.charAt(0).toUpperCase() : 'A';
+  };
 
   return (
     <header className="bg-white w-full p-2 sm:p-4 md:p-5 lg:p-6 flex justify-between items-center border-b-2 border-outline">
       {profile && (
-        <img
-          src={profile.imageUrl || 'https://via.placeholder.com/40'}
-          alt="Profile"
-          className="w-10 h-10 rounded-full bg-gray-300 object-cover ml-auto"
-        />
+        <div className="relative ml-auto" ref={dropdownRef}>
+          <button
+            onClick={() => setShowDropdown(!showDropdown)}
+            className="w-10 h-10 rounded-full bg-primaryGreen text-white flex items-center justify-center text-lg font-semibold"
+          >
+            {getInitials(profile.name)}
+          </button>
+
+          {showDropdown && (
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-outlineGray">
+              <div className="px-4 py-2 border-b border-outlineGray">
+                <p className="text-sm font-medium text-textGray">{profile.name}</p>
+                <p className="text-xs text-gray-500">{profile.email}</p>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-2 text-sm text-red hover:bg-red-50 flex items-center gap-2"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       )}
     </header>
   );
