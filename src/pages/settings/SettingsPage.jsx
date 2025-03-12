@@ -5,6 +5,8 @@ import Header from '../../components/layout/Header';
 
 function SettingsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiMessage, setApiMessage] = useState({ type: '', text: '' });
   const [newAdmin, setNewAdmin] = useState({
     name: '',
     email: '',
@@ -24,17 +26,51 @@ function SettingsPage() {
     });
   };
 
-  const handleSubmit = e => {
+  const registerAdmin = async adminData => {
+    try {
+      const response = await fetch('http://localhost:8080/api/admin/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: adminData.name,
+          email: adminData.email,
+          password: adminData.password,
+          role: 'ADMIN',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to register admin');
+      }
+
+      return data;
+    } catch (error) {
+      throw new Error(error.message || 'Something went wrong');
+    }
+  };
+
+  const handleSubmit = async e => {
     e.preventDefault();
-    // admin creation logic here
-    console.log('New admin data:', newAdmin);
-    setIsModalOpen(false);
-    setNewAdmin({
-      name: '',
-      email: '',
-      role: 'admin',
-      password: '',
-    });
+    setIsLoading(true);
+    setApiMessage({ type: '', text: '' });
+
+    try {
+      const result = await registerAdmin(newAdmin);
+      setApiMessage({ type: 'success', text: result.message });
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setNewAdmin({ name: '', email: '', role: 'admin', password: '' });
+        setApiMessage({ type: '', text: '' });
+      }, 2000);
+    } catch (error) {
+      setApiMessage({ type: 'error', text: error.message });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -141,6 +177,7 @@ function SettingsPage() {
                 <button
                   onClick={() => setIsModalOpen(false)}
                   className="text-textGray hover:text-gray-700 p-1"
+                  disabled={isLoading}
                 >
                   <X size={20} />
                 </button>
@@ -148,6 +185,18 @@ function SettingsPage() {
             </div>
 
             <div className="p-6">
+              {apiMessage.text && (
+                <div
+                  className={`mb-4 p-3 rounded-md ${
+                    apiMessage.type === 'success'
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-red-100 text-red'
+                  }`}
+                >
+                  {apiMessage.text}
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-textGray mb-1">
@@ -215,15 +264,36 @@ function SettingsPage() {
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="w-full sm:w-1/2 px-4 py-2 border border-gray-300 rounded-md text-textGray hover:bg-gray-50"
+                    className="w-full sm:w-1/2 px-4 py-2 border border-gray-300 rounded-md text-textGray hover:bg-gray-50 disabled:opacity-50"
+                    disabled={isLoading}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="w-full sm:w-1/2 px-4 py-2 bg-primaryGreen text-white rounded-md hover:bg-green-600"
+                    className="w-full sm:w-1/2 px-4 py-2 bg-primaryGreen text-white rounded-md hover:bg-green-600 disabled:opacity-50 flex items-center justify-center"
+                    disabled={isLoading}
                   >
-                    Add Admin
+                    {isLoading ? (
+                      <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          fill="none"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                    ) : (
+                      'Add Admin'
+                    )}
                   </button>
                 </div>
               </form>
