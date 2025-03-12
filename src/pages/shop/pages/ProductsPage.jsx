@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Plus, X, ImageUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../../components/layout/Sidebar';
-import Header from '../../components/layout/Header';
-import ProductTable from '../../components/shop/ProductTable';
-import { API_ENDPOINTS, apiRequest } from '../../config/api';
+import Sidebar from '../../../components/layout/Sidebar';
+import Header from '../../../components/layout/Header';
+import ProductTable from '../components/ProductTable';
+import { API_ENDPOINTS, apiRequest } from '../../../config/api';
 
 function ProductsPage() {
   const [products, setProducts] = useState([]);

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ImageUp, X } from 'lucide-react';
-import Sidebar from '../../components/layout/Sidebar';
-import Header from '../../components/layout/Header';
-import { API_ENDPOINTS, apiRequest } from '../../config/api';
+import Sidebar from '../../../components/layout/Sidebar';
+import Header from '../../../components/layout/Header';
+import { API_ENDPOINTS, apiRequest } from '../../../config/api';
 
 export default function EditProduct() {
   const { id } = useParams();
