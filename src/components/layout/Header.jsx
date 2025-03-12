@@ -36,7 +36,7 @@ function Header() {
   };
 
   return (
-    <header className="bg-white w-full p-2 sm:p-4 md:p-5 lg:p-6 flex justify-between items-center border-b-2 border-outline">
+    <header className="sticky top-0 z-40 bg-white w-full p-2 sm:p-4 md:p-5 lg:p-6 flex justify-between items-center border-b-2 border-outline shadow-sm">
       {profile && (
         <div className="relative ml-auto" ref={dropdownRef}>
           <button

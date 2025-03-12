@@ -79,9 +79,9 @@ function AddProduct() {
   return (
     <div className="bg-white min-h-screen flex flex-col md:flex-row">
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-1 w-full flex flex-col">
         <Header />
-        <div className="p-4 md:p-8">
+        <div className="flex-1 p-4 md:p-8 overflow-x-hidden">
           <div className="max-w-2xl mx-auto">
             {/* Header Section */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">

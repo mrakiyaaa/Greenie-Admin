@@ -115,9 +115,9 @@ function ProductsPage() {
   return (
     <div className="bg-white min-h-screen flex flex-col md:flex-row">
       <Sidebar />
-      <div className="flex-1 w-full">
+      <div className="flex-1 w-full flex flex-col">
         <Header />
-        <div className="p-4 md:p-8 max-w-full overflow-hidden">
+        <div className="flex-1 p-4 md:p-8 max-w-full overflow-x-hidden">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <h2 className="text-xl md:text-2xl font-semibold text-textGray">Products</h2>
             <button
