@@ -8,6 +8,7 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import ProductsPage from './pages/shop/ProductsPage';
 import OrdersPage from './pages/shop/OrdersPage';
+import SettingsPage from './pages/settings/SettingsPage';
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
         {/* Shop Routes */}
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/orders" element={<OrdersPage />} />
+
+        {/* Settings Route */}
+        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </Router>
   );
