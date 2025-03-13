@@ -5,6 +5,7 @@ export const API_ENDPOINTS = {
     REGISTER: `${BASE_URL}/admin/register`,
     LOGIN: `${BASE_URL}/admin/login`,
     GET_ALL: `${BASE_URL}/admin/all`,
+    DELETE: adminId => `${BASE_URL}/admin/delete/${adminId}`,
   },
   PRODUCTS: {
     GET_ALL: `${BASE_URL}/products/all`,
@@ -27,7 +28,7 @@ export const apiRequest = async (endpoint, options = {}) => {
       ...options,
       headers: {
         'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
+        Authorization: `Bearer ${token}`, // Always include token
         ...options.headers,
       },
     });
@@ -38,14 +39,9 @@ export const apiRequest = async (endpoint, options = {}) => {
       throw new Error(data.message || 'Request failed');
     }
 
-    // For product creation, verify the response has required fields
-    if (endpoint === API_ENDPOINTS.PRODUCTS.ADD && !data.productID) {
-      console.warn('Backend response missing productID:', data);
-    }
-
     return data;
   } catch (error) {
     console.error('API Request Error:', error);
-    throw new Error(error.message || 'Something went wrong');
+    throw error; // Throw the original error to maintain the error message
   }
 };
