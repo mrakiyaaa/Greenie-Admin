@@ -6,11 +6,12 @@ import AddChallenge from './pages/challenges/AddChallenge';
 import ReviewChallenge from './pages/challenges/ReviewChallenge';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
-import ProductsPage from './pages/shop/ProductsPage';
-import OrdersPage from './pages/shop/OrdersPage';
+import ProductsPage from './pages/shop/pages/ProductsPage';
+import OrdersPage from './pages/shop/pages/OrdersPage';
 import SettingsPage from './pages/settings/SettingsPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import PublicRoute from './components/auth/PublicRoute';
+import AddProduct from './pages/shop/components/AddProduct';
 
 function App() {
   return (
@@ -80,6 +81,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ProductsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products/add"
+          element={
+            <ProtectedRoute>
+              <AddProduct />
             </ProtectedRoute>
           }
         />
