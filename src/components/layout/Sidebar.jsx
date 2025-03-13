@@ -59,7 +59,7 @@ function Sidebar() {
               </Link>
             </li>
             <li className="mb-2 flex items-center mt-6">
-              <Link to="/proof" className="flex items-center space-x-2">
+              <Link to="/proofs/proof-submission" className="flex items-center space-x-2">
                 <ListCheck className="mr-2" size={20} />
                 <span className="text-lg">Proof Submission</span>
               </Link>
