@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Plus, X, Trash2, Edit } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Plus, X, Trash2 } from 'lucide-react';
 import Sidebar from '../../components/layout/Sidebar';
 import Header from '../../components/layout/Header';
 import { API_ENDPOINTS, apiRequest } from '../../config/api';
@@ -15,10 +15,25 @@ function SettingsPage() {
     password: '',
   });
 
-  const [admins] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'admin' },
-  ]);
+  const [admins, setAdmins] = useState([]);
+  const [isLoadingAdmins, setIsLoadingAdmins] = useState(true);
+  const [adminError, setAdminError] = useState('');
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
+  const fetchAdmins = async () => {
+    try {
+      const data = await apiRequest(API_ENDPOINTS.ADMIN.GET_ALL);
+      setAdmins(data);
+    } catch (error) {
+      setAdminError('Failed to fetch admins');
+      console.error('Error:', error);
+    } finally {
+      setIsLoadingAdmins(false);
+    }
+  };
 
   const handleInputChange = e => {
     setNewAdmin({
@@ -60,9 +75,9 @@ function SettingsPage() {
   };
 
   return (
-    <div className="bg-white min-h-screen flex">
+    <div className="bg-white min-h-screen flex flex-col md:flex-row">
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-1 w-full flex flex-col">
         <Header />
         <div className="p-4 md:p-8">
           <div className="flex justify-between items-center mb-4 md:mb-6">
@@ -82,73 +97,83 @@ function SettingsPage() {
               </button>
             </div>
 
-            {/* Admins List - Responsive table */}
-            <div className="overflow-x-auto -mx-4 sm:mx-0">
-              <div className="inline-block min-w-full align-middle">
-                <div className="overflow-hidden border border-outlineGray md:rounded-lg">
-                  <table className="min-w-full divide-y divide-outlineGray">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-textGray uppercase tracking-wider"
-                        >
-                          Name
-                        </th>
-                        <th
-                          scope="col"
-                          className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-textGray uppercase tracking-wider"
-                        >
-                          Email
-                        </th>
-                        <th
-                          scope="col"
-                          className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-textGray uppercase tracking-wider"
-                        >
-                          Role
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-2 sm:px-6 sm:py-3 text-right text-xs font-medium text-textGray uppercase tracking-wider"
-                        >
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-outlineGray">
-                      {admins.map(admin => (
-                        <tr key={admin.id} className="hover:bg-gray-50">
-                          <td className="px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap">
-                            <div className="flex flex-col sm:flex-row sm:items-center">
-                              <div className="text-sm font-medium text-textGray">{admin.name}</div>
-                              <div className="text-sm text-gray-500 sm:hidden mt-1">
-                                {admin.email}
-                              </div>
-                            </div>
-                          </td>
-                          <td className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-textGray">
-                            {admin.email}
-                          </td>
-                          <td className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-textGray capitalize">
-                            {admin.role}
-                          </td>
-                          <td className="px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div className="flex justify-end gap-2">
-                              <button className="text-blue-600 hover:text-blue-800 p-1">
-                                <Edit size={18} />
-                              </button>
-                              <button className="text-red hover:text-red-800 p-1">
-                                <Trash2 size={18} />
-                              </button>
-                            </div>
-                          </td>
+            {adminError && (
+              <div className="mb-4 p-3 bg-red-100 text-red rounded-md">{adminError}</div>
+            )}
+
+            {isLoadingAdmins ? (
+              <div className="text-center py-4">Loading admins...</div>
+            ) : (
+              <div className="overflow-x-auto -mx-4 sm:mx-0">
+                <div className="inline-block min-w-full align-middle">
+                  <div className="overflow-hidden border border-outlineGray md:rounded-lg">
+                    <table className="min-w-full divide-y divide-outlineGray">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-textGray uppercase tracking-wider"
+                          >
+                            Name
+                          </th>
+                          <th
+                            scope="col"
+                            className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-textGray uppercase tracking-wider"
+                          >
+                            Email
+                          </th>
+                          <th
+                            scope="col"
+                            className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-textGray uppercase tracking-wider"
+                          >
+                            Role
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-2 sm:px-6 sm:py-3 text-right text-xs font-medium text-textGray uppercase tracking-wider"
+                          >
+                            Actions
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-outlineGray">
+                        {admins.map(admin => (
+                          <tr key={admin.id} className="hover:bg-gray-50">
+                            <td className="px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap">
+                              <div className="flex flex-col sm:flex-row sm:items-center">
+                                <div className="text-sm font-medium text-textGray">
+                                  {admin.name}
+                                </div>
+                                <div className="text-sm text-gray-500 sm:hidden mt-1">
+                                  {admin.email}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-textGray">
+                              {admin.email}
+                            </td>
+                            <td className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-textGray capitalize">
+                              {admin.role}
+                            </td>
+                            <td className="px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap text-right text-sm font-medium">
+                              <div className="flex justify-end">
+                                <button className="text-red hover:text-red-800 p-1">
+                                  <Trash2 size={18} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    {admins.length === 0 && (
+                      <div className="text-center py-4 text-gray-500">No admins found</div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

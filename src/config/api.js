@@ -4,6 +4,7 @@ export const API_ENDPOINTS = {
   ADMIN: {
     REGISTER: `${BASE_URL}/admin/register`,
     LOGIN: `${BASE_URL}/admin/login`,
+    GET_ALL: `${BASE_URL}/admin/all`,
   },
   PRODUCTS: {
     GET_ALL: `${BASE_URL}/products/all`,
@@ -19,10 +20,14 @@ export const API_ENDPOINTS = {
 
 export const apiRequest = async (endpoint, options = {}) => {
   try {
+    const adminAuth = localStorage.getItem('adminAuth');
+    const token = adminAuth ? JSON.parse(adminAuth).token : null;
+
     const response = await fetch(endpoint, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
         ...options.headers,
       },
     });
