@@ -51,7 +51,7 @@ const ProofSubmission = () => {
       <p className="mb-4">Filter by: 
         <button className="ml-2 px-3 py-1 bg-gray-200 rounded" onClick={() => setFilter("All")}>All</button>
         <button className="ml-2 px-3 py-1 bg-green-200 text-green-700 rounded" onClick={() => setFilter("Verified")}>Verified</button>
-        <button className="ml-2 px-3 py-1 bg-red-200 text-red-700 rounded" onClick={() => setFilter("Issue")}>With Issue</button>
+        <button className="ml-2 px-3 py-1 bg-lightRed text-darkRed rounded" onClick={() => setFilter("Issue")}>With Issue</button>
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {filteredProofs.map((proof) => (
