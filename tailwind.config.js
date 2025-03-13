@@ -8,6 +8,8 @@ export default {
         primaryGreen: '#1BAC5F',
         white: '#FFFFFF',
         red: '#E15959',
+        darkRed: '#731313',
+        lightRed: '#EDBBBB',
         outlineGray: '#DBDBDB',
         bgLightGray: '#F8F8F8',
       },
