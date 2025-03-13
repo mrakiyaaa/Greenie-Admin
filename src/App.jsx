@@ -12,6 +12,8 @@ import SettingsPage from './pages/settings/SettingsPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import PublicRoute from './components/auth/PublicRoute';
 import AddProduct from './pages/shop/components/AddProduct';
+import ProofSubmission from "./pages/proofs/ProofSubmission";
+import ViewProof from "./pages/proofs/ViewProof";
 
 function App() {
   return (
@@ -76,6 +78,19 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route 
+           path="/proofs/proof-submission" 
+           element={
+           <ProofSubmission />
+           }
+        />
+        <Route
+          path="/proofs/view-proof"
+          element={
+           <ViewProof />
+          } 
+        />
+
         <Route
           path="/products"
           element={
