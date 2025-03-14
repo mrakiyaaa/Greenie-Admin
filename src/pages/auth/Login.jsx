@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import loginimg from '../../assets/login.svg';
 import { API_ENDPOINTS, apiRequest } from '../../config/api';
+import { useToast } from '../../hooks/useToast';
 
 function Login() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,13 +15,31 @@ function Login() {
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError('');
+  };
+
+  const getErrorMessage = error => {
+    switch (error?.message) {
+      case 'Invalid credentials':
+        return 'Incorrect email or password';
+      case 'User not found':
+        return 'No account found with this email';
+      case 'Account locked':
+        return 'Your account has been locked. Please contact support';
+      case 'Account disabled':
+        return 'Your account has been disabled. Please contact support';
+      case 'Network error - Please check your internet connection':
+        return 'Unable to connect - Please check your internet connection';
+      default:
+        if (error?.message?.startsWith('Server error:')) {
+          return 'Something went wrong on our end. Please try again later';
+        }
+        return error?.message || 'An unexpected error occurred';
+    }
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
 
     try {
       const response = await apiRequest(API_ENDPOINTS.ADMIN.LOGIN, {
@@ -28,7 +47,6 @@ function Login() {
         body: JSON.stringify(formData),
       });
 
-      // auth data in localStorage
       localStorage.setItem(
         'adminAuth',
         JSON.stringify({
@@ -39,10 +57,14 @@ function Login() {
         })
       );
 
-      // to dashboard
+      showToast('Successfully logged in', 'success');
       navigate('/', { replace: true });
     } catch (error) {
-      setError(error.message || 'Failed to login. Please check your credentials.');
+      showToast(getErrorMessage(error), 'error');
+      // Clear password field on authentication errors
+      if (error.message === 'Invalid credentials' || error.message === 'User not found') {
+        setFormData(prev => ({ ...prev, password: '' }));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -59,12 +81,6 @@ function Login() {
           <h2 className="text-[24px] text-textGray font-sans font-normal text-center mb-6">
             Log in to your Account
           </h2>
-
-          {error && (
-            <div className="w-full max-w-[400px] mb-4 p-3 bg-red-100 text-red rounded-md">
-              {error}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="w-full max-w-[400px]">
             <div className="mb-4">
