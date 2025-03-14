@@ -28,7 +28,7 @@ export const apiRequest = async (endpoint, options = {}) => {
       ...options,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // Always include token
+        Authorization: token ? `Bearer ${token}` : '',
         ...options.headers,
       },
     });
@@ -36,12 +36,28 @@ export const apiRequest = async (endpoint, options = {}) => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.message || 'Request failed');
+      // Handle specific HTTP status codes
+      switch (response.status) {
+        case 401:
+          throw new Error('Invalid credentials');
+        case 404:
+          throw new Error('User not found');
+        case 423:
+          throw new Error('Account locked');
+        case 403:
+          throw new Error('Account disabled');
+        case 500:
+          throw new Error(`Server error: ${data}`);
+        default:
+          throw new Error(data || 'Request failed');
+      }
     }
 
     return data;
   } catch (error) {
-    console.error('API Request Error:', error);
-    throw error; // Throw the original error to maintain the error message
+    if (!error.response && !navigator.onLine) {
+      throw new Error('Network error - Please check your internet connection');
+    }
+    throw error;
   }
 };
