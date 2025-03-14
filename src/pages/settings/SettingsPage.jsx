@@ -108,33 +108,40 @@ function SettingsPage() {
     }
   };
 
-  const renderDeleteButton = admin => (
-    <button
-      onClick={() => {
-        if (admin.adminId === currentAdmin.adminId) {
-          setDeleteError('You cannot delete your own account');
-          return;
-        }
-        if (admins.length <= 1) {
-          setDeleteError('Cannot delete the last admin account');
-          return;
-        }
-        setAdminToDelete(admin);
-        setShowDeleteModal(true);
-      }}
-      className={`text-red hover:text-red-800 p-1 transition-colors duration-200 
-        ${admin.adminId === currentAdmin.adminId || admins.length <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-      title={
-        admin.adminId === currentAdmin.adminId
-          ? 'You cannot delete your own account'
-          : admins.length <= 1
-            ? 'Cannot delete the last admin'
-            : 'Delete admin'
-      }
-    >
-      <Trash2 size={18} />
-    </button>
-  );
+  const renderDeleteButton = admin => {
+    const isSuperAdmin = admin.role === 'SUPER_ADMIN';
+    const isCurrentUserSuperAdmin = currentAdmin.role === 'SUPER_ADMIN';
+    const isDisabled =
+      (isSuperAdmin && !isCurrentUserSuperAdmin) ||
+      admin.adminId === currentAdmin.adminId ||
+      admins.length <= 1;
+
+    const getTooltipMessage = () => {
+      if (admin.adminId === currentAdmin.adminId) return 'You cannot delete your own account';
+      if (admins.length <= 1) return 'Cannot delete the last admin';
+      if (isSuperAdmin && !isCurrentUserSuperAdmin)
+        return 'Only super admins can delete other super admins';
+      return 'Delete admin';
+    };
+
+    return (
+      <button
+        onClick={() => {
+          if (isDisabled) {
+            setDeleteError(getTooltipMessage());
+            return;
+          }
+          setAdminToDelete(admin);
+          setShowDeleteModal(true);
+        }}
+        className={`text-red hover:text-red-800 p-1 transition-colors duration-200 
+          ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+        title={getTooltipMessage()}
+      >
+        <Trash2 size={18} />
+      </button>
+    );
+  };
 
   return (
     <div className="bg-white min-h-screen flex flex-col md:flex-row">
@@ -192,6 +199,12 @@ function SettingsPage() {
                           </th>
                           <th
                             scope="col"
+                            className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-textGray uppercase tracking-wider"
+                          >
+                            Status
+                          </th>
+                          <th
+                            scope="col"
                             className="px-3 py-2 sm:px-6 sm:py-3 text-right text-xs font-medium text-textGray uppercase tracking-wider"
                           >
                             Actions
@@ -214,8 +227,20 @@ function SettingsPage() {
                             <td className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-textGray">
                               {admin.email}
                             </td>
-                            <td className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-textGray capitalize">
-                              {admin.role}
+                            <td className="hidden sm:table-cell px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap">
+                              <span
+                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                ${admin.role === 'SUPER_ADMIN' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`}
+                              >
+                                {admin.role.replace('_', ' ')}
+                              </span>
+                            </td>
+                            <td className="px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap">
+                              {admin.adminId === currentAdmin.adminId && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                  Current logged in
+                                </span>
+                              )}
                             </td>
                             <td className="px-3 py-2 sm:px-6 sm:py-4 whitespace-nowrap text-right text-sm font-medium">
                               <div className="flex justify-end">{renderDeleteButton(admin)}</div>
