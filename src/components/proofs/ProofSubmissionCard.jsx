@@ -7,7 +7,7 @@ const ProofSubmissionCard = ({ proof }) => {
 
   const handleDelete = () => {
     setIsDeleted(true);
-    setTimeout(() => setIsViewing(false), 2000); // Close popup after showing message
+    setTimeout(() => setIsViewing(false), 2000);
   };
 
   return (
@@ -34,19 +34,15 @@ const ProofSubmissionCard = ({ proof }) => {
         </div>
       )}
 
-      {/* ✅ Popup Modal */}
       {isViewing && !isDeleted && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
-            {/* ✅ Close Button */}
             <button
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl"
               onClick={() => setIsViewing(false)}
             >
               ✖
             </button>
-
-            {/* ✅ ViewProof Component */}
             <ViewProof proof={proof} onDelete={handleDelete} />
           </div>
         </div>
