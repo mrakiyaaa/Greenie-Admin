@@ -1,90 +1,132 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-const ViewProof = ({ proof, onClose }) => {
-  const [proofDetails, setProofDetails] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
+const ViewProof = ({ proof, onDelete, onClose, onViewPost }) => {
+  const [details, setDetails] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
-    setProofDetails({
-      challengeName: proof.challengeName || "Challenge Name",
-      submittedBy: proof.submitter || "Unknown",
-      userFeedback: proof.userFeedback || "No feedback provided.",
-      aiResponse: proof.aiResponse || "AI analysis pending.",
-      isVerified: proof.status === "Verified",
+    setDetails({
+      id: proof.id,
+      challengeName: proof.challengeName,
+      submittedBy: proof.submitter,
+      userFeedback: proof.userFeedback,
+      aiResponse: proof.aiResponse,
+      status: proof.status,
     });
   }, [proof]);
 
-  const handleDelete = () => {
-    setProofDetails(null);
-    setShowPopup(false); // Immediately hide the popup
-    onDelete(); // Call the delete function from the parent
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`http://localhost:8080/admin/proof/${proof.id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        toast.success("✅ Post has been permanently deleted.");
+        onDelete();
+      } else {
+        toast.error("❌ Failed to delete proof. Please try again.");
+      }
+    } catch (err) {
+      console.error("Delete Error:", err);
+      toast.warning("⚠️ Something went wrong while deleting.");
+    } finally {
+      setShowConfirmModal(false);
+    }
   };
-  
+
+  if (!details) return null;
+
   return (
-    <div className="w-full">
-      {showPopup && (
-        <div className="absolute top-5 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
-          Post successfully deleted!
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative animate-fadeIn">
+        {/* ❌ Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-purple-600 text-2xl font-bold hover:text-purple-800"
+        >
+          &times;
+        </button>
+
+        {/* 🧾 Title */}
+        <h2 className="text-xl font-semibold mb-2">Proof Details</h2>
+
+        {/* 🏷️ Status */}
+        <span
+          className={`absolute top-6 right-16 text-sm px-3 py-1 rounded-md font-medium ${
+            details.status === "Verified"
+              ? "bg-green-100 text-green-800"
+              : details.status === "Issue"
+              ? "bg-lightRed text-darkRed"
+              : "bg-gray-200 text-gray-600"
+          }`}
+        >
+          {details.status}
+        </span>
+
+        {/* 📋 Info */}
+        <div className="mt-4 space-y-4 text-sm">
+          <div>
+            <p className="font-semibold text-gray-600">Challenge Name</p>
+            <p className="text-gray-800">{details.challengeName}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-600">Submitted By</p>
+            <p className="text-gray-800">{details.submittedBy}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-600">User Feedback</p>
+            <p className="text-gray-800">{details.userFeedback}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-600">AI Response</p>
+            <p className="text-gray-800">{details.aiResponse}</p>
+          </div>
+        </div>
+
+        {/* 🔘 Buttons */}
+        <div className="mt-6 space-y-3">
+          <button
+            onClick={() => setShowConfirmModal(true)}
+            className="bg-mediumRed hover:bg-darkRed text-white w-full py-2 rounded-md font-semibold"
+          >
+            Delete Post
+          </button>
+          <button
+            onClick={onViewPost}
+            className="bg-green-600 hover:bg-green-700 text-white w-full py-2 rounded-md font-semibold"
+          >
+            View Post
+          </button>
+        </div>
+      </div>
+
+      {/* ✅ Custom Confirm Delete Modal */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
+            <h3 className="text-lg font-semibold mb-2">Are you sure?</h3>
+            <p className="text-sm text-gray-600 mb-5">
+              Do you really want to delete this proof? This action cannot be undone.
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={handleDelete}
+                className="bg-mediumRed hover:bg-darkRed text-white px-4 py-2 rounded font-medium"
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded font-medium"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       )}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        {proofDetails ? (
-          <>
-            {/* ✅ Header */}
-            <div className="flex justify-between items-center border-b pb-3">
-              <h2 className="text-xl font-semibold">Proof Details</h2>
-              <span
-                className={`px-3 py-1 rounded text-sm font-medium ${
-                  proofDetails.isVerified
-                    ? "bg-green-200 text-green-700"
-                    : "bg-gray-200 text-gray-700"
-                }`}
-              >
-                {proofDetails.isVerified ? "Verified" : "Pending"}
-              </span>
-            </div>
-
-            {/* ✅ Details */}
-            <div className="mt-5 space-y-4">
-              <div>
-                <p className="text-sm font-semibold">Challenge Name</p>
-                <p className="text-gray-700">{proofDetails.challengeName}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold">Submitted By</p>
-                <p className="text-gray-700">{proofDetails.submittedBy}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold">User Feedback</p>
-                <p className="text-gray-700 text-sm">{proofDetails.userFeedback}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold">AI Response</p>
-                <p className="text-gray-700 text-sm">{proofDetails.aiResponse}</p>
-              </div>
-            </div>
-
-            {/* ✅ Buttons */}
-            <div className="mt-6">
-              <button
-                className="bg-red text-white w-full py-2 rounded-lg mb-3 font-semibold"
-                onClick={handleDelete}
-              >
-                Delete Post
-              </button>
-              <button className="bg-green-600 text-white w-full py-2 rounded-lg font-semibold">
-                View Post
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className="flex items-center justify-center bg-lightRed py-3 px-6 rounded-lg shadow-md border border">
-            <p className="text-sm font-semibold text-darkRed uppercase">
-              Post has been permanently deleted
-            </p>
-          </div>
-        )}
-      </div>
     </div>
   );
 };
