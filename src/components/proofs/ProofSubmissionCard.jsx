@@ -31,7 +31,7 @@ const ProofSubmissionCard = ({ proof, onDeleted }) => {
           <p className="text-xs font-mono text-gray-500 truncate">#{proof.id}</p>
           <span className={`text-sm font-medium px-2 py-1 rounded-full ${
             proof.status === "Verified" ? "bg-green-100 text-green-700"
-            : proof.status === "Issue" ? "bg-red-100 text-red-600"
+            : proof.status === "Issue" ? "bg-lightRed text-darkRed"
             : "bg-gray-200 text-gray-600"
           }`}>
             {proof.status}
