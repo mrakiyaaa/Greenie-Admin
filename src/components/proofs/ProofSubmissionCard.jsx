@@ -1,44 +1,51 @@
 import { useState } from "react";
 import ViewProof from "../../pages/proofs/ViewProof";
 
-const ProofSubmissionCard = ({ proof }) => {
+const ProofSubmissionCard = ({ proof, onDeleted }) => {
   const [isViewing, setIsViewing] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
 
-  const handleDelete = () => {
-    setIsDeleted(true);
-    setTimeout(() => setIsViewing(false), 2000);
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`http://localhost:8080/admin/proof/${proof.id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        onDeleted(proof.id);
+        setIsViewing(false);
+      } else {
+        alert("Error deleting post");
+      }
+    } catch (err) {
+      console.error("Delete error:", err.message);
+    }
   };
 
   return (
-    <div>
-      {!isDeleted && (
-        <div
-          className="p-5 rounded-lg bg-white shadow-md cursor-pointer hover:shadow-lg transition"
-          onClick={() => setIsViewing(true)}
-        >
-          <div className="flex justify-between items-center mb-2">
-            <p className="text-gray-700 font-medium">#{proof.id}</p>
-            <p
-              className={`inline-block px-2 py-1 text-sm rounded-full ${
-                proof.status === "Verified"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-lightRed text-darkRed"
-              }`}
-            >
-              {proof.status}
-            </p>
-          </div>
-          <p className="text-lg font-semibold text-gray-900">{proof.challengeName}</p>
-          <p className="text-sm text-gray-500">Submitted by: {proof.submitter}</p>
+    <>
+      <div
+        className="bg-white p-5 rounded-xl shadow hover:shadow-xl cursor-pointer transition"
+        onClick={() => setIsViewing(true)}
+      >
+        <div className="flex justify-between items-center mb-1">
+          <p className="text-xs font-mono text-gray-500 truncate">#{proof.id}</p>
+          <span className={`text-sm font-medium px-2 py-1 rounded-full ${
+            proof.status === "Verified" ? "bg-green-100 text-green-700"
+            : proof.status === "Issue" ? "bg-red-100 text-red-600"
+            : "bg-gray-200 text-gray-600"
+          }`}>
+            {proof.status}
+          </span>
         </div>
-      )}
+        <p className="text-base font-semibold text-black">{proof.challengeName}</p>
+        <p className="text-sm text-gray-500">Submitted by: {proof.submitter}</p>
+      </div>
 
-      {isViewing && !isDeleted && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
+      {isViewing && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
             <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl"
+              className="absolute top-2 right-2 text-xl text-gray-400 hover:text-gray-700"
               onClick={() => setIsViewing(false)}
             >
               ✖
@@ -47,7 +54,7 @@ const ProofSubmissionCard = ({ proof }) => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
