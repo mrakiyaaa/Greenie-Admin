@@ -11,21 +11,22 @@ const ProofSubmission = () => {
 
   useEffect(() => {
     fetch(API_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch proofs");
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
         const formatted = data.map((proof) => ({
-          ...proof, // ✅ Spread to keep original fields
-          id: proof.id, // ✅ Use 'id' (MongoDB default)
-          submitter: proof.username, // ✅ Rename for frontend use
+          ...proof,
+          id: proof.id,
+          submitter: proof.username,
           userFeedback: proof.description,
         }));
         setProofs(formatted);
       })
       .catch((err) => console.error("Error fetching proofs:", err.message));
   }, []);
+
+  const handleDelete = (deletedId) => {
+    setProofs((prev) => prev.filter((p) => p.id !== deletedId));
+  };
 
   const filteredProofs =
     filter === "All" ? proofs : proofs.filter((proof) => proof.status === filter);
@@ -40,11 +41,11 @@ const ProofSubmission = () => {
             Filter by:
             <button className="ml-2 px-3 py-1 bg-gray-200 rounded" onClick={() => setFilter("All")}>All</button>
             <button className="ml-2 px-3 py-1 bg-green-200 text-green-700 rounded" onClick={() => setFilter("Verified")}>Verified</button>
-            <button className="ml-2 px-3 py-1 bg-lightRed text-darkRed rounded" onClick={() => setFilter("Issue")}>With Issue</button>
+            <button className="ml-2 px-3 py-1 bg-red-200 text-red-700 rounded" onClick={() => setFilter("Issue")}>With Issue</button>
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredProofs.map((proof) => (
-              <ProofSubmissionCard key={proof.id} proof={proof} />
+              <ProofSubmissionCard key={proof.id} proof={proof} onDeleted={handleDelete} />
             ))}
           </div>
         </div>
