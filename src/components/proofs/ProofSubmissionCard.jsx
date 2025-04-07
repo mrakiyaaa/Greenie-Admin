@@ -16,7 +16,7 @@ const ProofSubmissionCard = ({ proof, onDeleted }) => {
         onDeleted(proof.id); // Notify parent to remove the card
         setIsViewing(false);
       } else {
-        alert("Error deleting post");
+        
       }
     } catch (err) {
       console.error("Delete error:", err.message);
@@ -24,7 +24,7 @@ const ProofSubmissionCard = ({ proof, onDeleted }) => {
   };
 
   const handleViewPost = () => {
-    navigate(`/admin/view-post/${proof.id}`); // Adjust this route if different
+    navigate(`/admin/view-post/${proof.id}`); // Replace with actual route
   };
 
   return (
@@ -54,7 +54,6 @@ const ProofSubmissionCard = ({ proof, onDeleted }) => {
       {isViewing && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative animate-fadeIn">
-            {/* ❌ Close Button (only closes the popup) */}
             <button
               className="absolute top-3 right-3 text-gray-400 hover:text-gray-800 text-xl"
               onClick={() => setIsViewing(false)}
