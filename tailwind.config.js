@@ -10,6 +10,8 @@ export default {
         red: '#E15959',
         darkRed: '#731313',
         lightRed: '#EDBBBB',
+        mediumRed: '#ff0000',
+        lowMedium: '	#ff5252',
         outlineGray: '#DBDBDB',
         bgLightGray: '#F8F8F8',
       },
