@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ViewProof from "../../pages/proofs/ViewProof";
 
 const ProofSubmissionCard = ({ proof, onDeleted }) => {
   const [isViewing, setIsViewing] = useState(false);
+  const navigate = useNavigate();
 
   const handleDelete = async () => {
     try {
@@ -11,7 +13,7 @@ const ProofSubmissionCard = ({ proof, onDeleted }) => {
       });
 
       if (res.ok) {
-        onDeleted(proof.id);
+        onDeleted(proof.id); // Notify parent to remove the card
         setIsViewing(false);
       } else {
         alert("Error deleting post");
@@ -19,6 +21,10 @@ const ProofSubmissionCard = ({ proof, onDeleted }) => {
     } catch (err) {
       console.error("Delete error:", err.message);
     }
+  };
+
+  const handleViewPost = () => {
+    navigate(`/admin/view-post/${proof.id}`); // Adjust this route if different
   };
 
   return (
@@ -29,11 +35,15 @@ const ProofSubmissionCard = ({ proof, onDeleted }) => {
       >
         <div className="flex justify-between items-center mb-1">
           <p className="text-xs font-mono text-gray-500 truncate">#{proof.id}</p>
-          <span className={`text-sm font-medium px-2 py-1 rounded-full ${
-            proof.status === "Verified" ? "bg-green-100 text-green-700"
-            : proof.status === "Issue" ? "bg-lightRed text-darkRed"
-            : "bg-gray-200 text-gray-600"
-          }`}>
+          <span
+            className={`text-sm font-medium px-2 py-1 rounded-full ${
+              proof.status === "Verified"
+                ? "bg-green-100 text-green-700"
+                : proof.status === "Issue"
+                ? "bg-lightRed text-darkRed"
+                : "bg-gray-200 text-gray-600"
+            }`}
+          >
             {proof.status}
           </span>
         </div>
@@ -42,15 +52,22 @@ const ProofSubmissionCard = ({ proof, onDeleted }) => {
       </div>
 
       {isViewing && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative animate-fadeIn">
+            {/* ❌ Close Button (only closes the popup) */}
             <button
-              className="absolute top-2 right-2 text-xl text-gray-400 hover:text-gray-700"
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-800 text-xl"
               onClick={() => setIsViewing(false)}
             >
               ✖
             </button>
-            <ViewProof proof={proof} onDelete={handleDelete} />
+
+            <ViewProof
+              proof={proof}
+              onDelete={handleDelete}
+              onClose={() => setIsViewing(false)}
+              onViewPost={handleViewPost}
+            />
           </div>
         </div>
       )}
