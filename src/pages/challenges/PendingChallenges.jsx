@@ -10,7 +10,7 @@ function PendingChallenges() {
   const [challenges, setChallenges] = useState([]);
 
   useEffect(function () {
-    fetch('http://localhost:8080/api/challenges') // Replace with your actual API endpoint
+    fetch('http://localhost:8080/api/admin/challenges/all')
       .then(function (response) {
         return response.json();
       })
