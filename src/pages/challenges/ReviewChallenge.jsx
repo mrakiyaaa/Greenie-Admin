@@ -5,7 +5,6 @@ function ReviewChallenges() {
   const navigate = useNavigate();
   const { challengeId } = useParams();
 
-  // Form state
   const [formData, setFormData] = useState({
     photoUrl: '',
     name: '',
@@ -18,21 +17,16 @@ function ReviewChallenges() {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
 
-  // Fetch challenge data and auto-fill the form
   useEffect(() => {
     async function fetchChallenge() {
       try {
         const response = await fetch(`http://localhost:8080/api/challenges/${challengeId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch challenge');
-        }
+        if (!response.ok) throw new Error('Failed to fetch challenge');
 
         const data = await response.json();
-        console.log('Fetched challenge data:', data); // Debug log
-
         setFormData({
           photoUrl: data.photoUrl || '',
-          name: data.name || data.challengeName || '', // fallback in case API uses `challengeName`
+          name: data.name || data.challengeName || '',
           points: data.points || '',
           description: data.description || '',
           addedBy: data.addedBy || '',
@@ -47,13 +41,11 @@ function ReviewChallenges() {
     fetchChallenge();
   }, [challengeId]);
 
-  // Handle input changes
   function handleChange(event) {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   }
 
-  // Handle form submission
   async function handleSubmit(event) {
     event.preventDefault();
     setLoading(true);
@@ -80,9 +72,42 @@ function ReviewChallenges() {
         setIsError(true);
       }
     } catch (error) {
+      console.error('Error approving challenge:', error);
       setMessage('Error approving challenge.');
       setIsError(true);
-      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+      setTimeout(() => setMessage(''), 5000);
+    }
+  }
+
+  async function handleDelete() {
+    const confirmDelete = window.confirm('Are you sure you want to delete this challenge?');
+    if (!confirmDelete) return;
+
+    setLoading(true);
+    setMessage('');
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/admin/challenges/delete/${challengeId}`,
+        {
+          method: 'DELETE',
+        }
+      );
+
+      if (response.ok) {
+        setMessage('Challenge deleted successfully!');
+        setIsError(false);
+        setTimeout(() => navigate('/challenges/pending-challenges'), 1500);
+      } else {
+        setMessage('Failed to delete challenge.');
+        setIsError(true);
+      }
+    } catch (error) {
+      console.error('Error deleting challenge:', error);
+      setMessage('Error deleting challenge.');
+      setIsError(true);
     } finally {
       setLoading(false);
       setTimeout(() => setMessage(''), 5000);
@@ -91,7 +116,6 @@ function ReviewChallenges() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg">
-      {/* Notification message */}
       {message && (
         <div
           className={`fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white ${
@@ -193,9 +217,10 @@ function ReviewChallenges() {
       <div className="flex justify-between mt-6">
         <button
           className="bg-red text-white px-4 py-2 rounded-md w-1/2 mr-2"
-          onClick={() => navigate(-1)}
+          onClick={handleDelete}
+          disabled={loading}
         >
-          Delete
+          {loading ? 'Deleting...' : 'Delete'}
         </button>
         <button
           onClick={handleSubmit}
