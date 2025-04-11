@@ -10,7 +10,7 @@ function ActiveCard({ challenge }) {
       <div
         className="h-24 w-full md:w-40 bg-gray-300 rounded-md bg-cover bg-center flex-shrink-0"
         style={{
-          backgroundImage: `url(${challenge.image || 'https://via.placeholder.com/240'})`,
+          backgroundImage: `url(${challenge.photoUrl || 'https://via.placeholder.com/240'})`,
         }}
       ></div>
 
@@ -28,7 +28,7 @@ function ActiveCard({ challenge }) {
 // Add PropTypes validation for the props
 ActiveCard.propTypes = {
   challenge: PropTypes.shape({
-    image: PropTypes.string,
+    photoUrl: PropTypes.string,
     name: PropTypes.string.isRequired,
     addedBy: PropTypes.string.isRequired,
     points: PropTypes.number.isRequired,

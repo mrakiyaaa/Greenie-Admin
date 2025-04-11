@@ -1,32 +1,53 @@
-import { useState } from 'react';
-import { ImageUp } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function ReviewChallenges() {
   const navigate = useNavigate();
+  const { challengeId } = useParams();
+
+  // Form state
   const [formData, setFormData] = useState({
-    image: null,
+    photoUrl: '',
     name: '',
     points: '',
     description: '',
     addedBy: '',
   });
 
-  const [previewImage, setPreviewImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
 
-  // Handle file upload
-  function handleImageUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-      setFormData({ ...formData, image: file });
-      setPreviewImage(URL.createObjectURL(file)); // Preview Image
-    }
-  }
+  // Fetch challenge data and auto-fill the form
+  useEffect(() => {
+    async function fetchChallenge() {
+      try {
+        const response = await fetch(`http://localhost:8080/api/challenges/${challengeId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch challenge');
+        }
 
-  // Handle input change
+        const data = await response.json();
+        console.log('Fetched challenge data:', data); // Debug log
+
+        setFormData({
+          photoUrl: data.photoUrl || '',
+          name: data.name || data.challengeName || '', // fallback in case API uses `challengeName`
+          points: data.points || '',
+          description: data.description || '',
+          addedBy: data.addedBy || '',
+        });
+      } catch (error) {
+        console.error('Error fetching challenge:', error);
+        setMessage('Failed to load challenge data');
+        setIsError(true);
+      }
+    }
+
+    fetchChallenge();
+  }, [challengeId]);
+
+  // Handle input changes
   function handleChange(event) {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
@@ -38,24 +59,22 @@ function ReviewChallenges() {
     setLoading(true);
     setMessage('');
 
-    const challengeData = new FormData();
-    challengeData.append('image', formData.image);
-    challengeData.append('name', formData.name);
-    challengeData.append('points', formData.points);
-    challengeData.append('description', formData.description);
-    challengeData.append('addedBy', formData.addedBy);
-
     try {
-      const response = await fetch('http://localhost:8080/api/challenges', {
-        method: 'POST',
-        body: challengeData,
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/admin/challenges/approve/${challengeId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
         setMessage('Challenge approved successfully!');
         setIsError(false);
-        setFormData({ image: null, name: '', points: '', description: '', addedBy: '' });
-        setPreviewImage(null);
+        setFormData({ photoUrl: '', name: '', points: '', description: '', addedBy: '' });
       } else {
         setMessage('Failed to approve challenge.');
         setIsError(true);
@@ -72,10 +91,12 @@ function ReviewChallenges() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg">
-      {/* Popup Message */}
+      {/* Notification message */}
       {message && (
         <div
-          className={`fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white ${isError ? 'bg-red' : 'bg-primaryGreen'}`}
+          className={`fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white ${
+            isError ? 'bg-red' : 'bg-primaryGreen'
+          }`}
         >
           {message}
         </div>
@@ -85,22 +106,27 @@ function ReviewChallenges() {
         Review Challenge
       </h2>
 
-      {/* Image Upload */}
-      <div className="mb-4 mt-10">
-        <label className="block text-text-gray font-medium mb-1">
-          Challenge Image <span className="text-red">*</span>
+      {/* Image URL Input */}
+      <div className="mb-4 mt-4">
+        <label className="block text-gray-700 font-medium mb-2">
+          Upload an Image <span className="text-red-500">*</span>
         </label>
-        <div className="border border-gray-300 p-20 rounded-lg flex flex-col items-center cursor-pointer">
-          <ImageUp className="text-gray-500 text-3xl mb-2" />
-          <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-          <p className="text-gray-500 text-sm">Upload Image</p>
-        </div>
-        {previewImage && (
-          <img
-            src={previewImage}
-            alt="Preview"
-            className="mt-2 w-32 h-32 object-cover rounded-md"
-          />
+        <input
+          type="text"
+          name="photoUrl"
+          className="w-full border border-gray-300 p-2 text-center h-32 rounded"
+          placeholder="Paste image URL here"
+          value={formData.photoUrl}
+          onChange={handleChange}
+        />
+        {formData.photoUrl && (
+          <div className="mt-4">
+            <img
+              src={formData.photoUrl}
+              alt="Preview"
+              className="w-full h-32 object-cover rounded-lg"
+            />
+          </div>
         )}
       </div>
 
@@ -134,7 +160,7 @@ function ReviewChallenges() {
         />
       </div>
 
-      {/* Number of Points */}
+      {/* Points */}
       <div className="mb-4 mt-4">
         <label className="block text-gray-700 font-medium mb-1">
           Number of Points <span className="text-red">*</span>
@@ -149,7 +175,7 @@ function ReviewChallenges() {
         />
       </div>
 
-      {/* Challenge Description */}
+      {/* Description */}
       <div className="mb-4 mt-4">
         <label className="block text-gray-700 font-medium mb-1">
           Challenge Description <span className="text-red">*</span>

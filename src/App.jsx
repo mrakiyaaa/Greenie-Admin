@@ -73,7 +73,7 @@ function App() {
             }
           />
           <Route
-            path="/challenges/review-challenge"
+            path="/challenges/review-challenge/:challengeId"
             element={
               <ProtectedRoute>
                 <ReviewChallenge />
