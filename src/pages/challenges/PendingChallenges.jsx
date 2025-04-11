@@ -110,14 +110,22 @@ function PendingChallenges() {
             {challenges.length > 0
               ? challenges.map(function (challenge) {
                   return (
-                    <Link key={challenge.id} to="/proofs/view-proof" state={{ challenge }}>
+                    <Link
+                      key={challenge.id}
+                      to="/challenges/review-challenge"
+                      state={{ challenge }}
+                    >
                       <PendingCard challenge={challenge} />
                     </Link>
                   );
                 })
               : exampleChallenges.map(function (challenge) {
                   return (
-                    <Link key={challenge.id} to="/proofs/view-proof" state={{ challenge }}>
+                    <Link
+                      key={challenge.id}
+                      to="/challenges/review-challenge"
+                      state={{ challenge }}
+                    >
                       <PendingCard challenge={challenge} />
                     </Link>
                   );
