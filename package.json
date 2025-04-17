@@ -16,6 +16,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.3",
     "framer-motion": "^12.5.0",
+    "greenie-admin": "file:",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.0",
     "lucide-react": "^0.476.0",

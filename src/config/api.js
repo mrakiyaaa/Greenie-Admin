@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
     GET_ALL: `${BASE_URL}/admin/all`,
     DELETE: adminId => `${BASE_URL}/admin/delete/${adminId}`,
   },
+
   PRODUCTS: {
     GET_ALL: `${BASE_URL}/products/all`,
     GET_ONE: id => `${BASE_URL}/products/${id}`,
@@ -14,8 +15,18 @@ export const API_ENDPOINTS = {
     UPDATE: id => `${BASE_URL}/products/update/${id}`,
     DELETE: id => `${BASE_URL}/products/delete/${id}`,
   },
+
   ORDERS: {
     GET_ALL: `${BASE_URL}/order/all`,
+  },
+
+  REPORTED_POSTS: {
+    GET_ALL: `${BASE_URL}/reported-posts/all`,
+    DELETE: reportId => `${BASE_URL}/reported-posts/delete/${reportId}`,
+  },
+
+  POSTS: {
+    DELETE: postId => `${BASE_URL}/posts/delete/${postId}`, // for deleting the actual post
   },
 };
 

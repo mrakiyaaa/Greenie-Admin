@@ -15,6 +15,7 @@ import AddProduct from './pages/shop/components/AddProduct';
 import ProofSubmission from './pages/proofs/ProofSubmission';
 import ViewProof from './pages/proofs/ViewProof';
 import { ToastProvider } from './contexts/ToastContext';
+import PostManagement from './pages/posts/PostManagement';
 
 function App() {
   return (
@@ -115,6 +116,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path="/posts" element={<PostManagement />} />
         </Routes>
       </Router>
     </ToastProvider>
