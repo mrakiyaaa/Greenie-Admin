@@ -65,7 +65,7 @@ function Sidebar() {
               </Link>
             </li>
             <li className="mb-2 flex items-center mt-6">
-              <Link to="/post" className="flex items-center space-x-2">
+              <Link to="/posts" className="flex items-center space-x-2">
                 <StickyNote className="mr-2" size={20} />
                 <span className="text-lg">Post Management</span>
               </Link>
