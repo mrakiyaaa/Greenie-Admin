@@ -155,7 +155,7 @@ function ReviewChallenges() {
       </div>
 
       {/* Added By */}
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <label className="block text-gray-700 font-medium mb-1">
           Added By <span className="text-red">*</span>
         </label>
@@ -167,7 +167,7 @@ function ReviewChallenges() {
           placeholder="Enter your name"
           className="border border-gray-300 p-3 w-full rounded-md"
         />
-      </div>
+      </div> */}
 
       {/* Challenge Name */}
       <div className="mb-4 mt-4">
