@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.3",
+    "axios": "^1.9.0",
     "framer-motion": "^12.5.0",
     "greenie-admin": "file:",
     "html2canvas": "^1.4.1",
